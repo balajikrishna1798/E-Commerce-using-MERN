@@ -1,20 +1,29 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Row, Button } from "react-bootstrap";
+import { Col, Container, Form, Row, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useSignupMutation } from "../services/appApi";
 import './auth.css'
 const Register = () => {
+    const [name,setName] = useState("")
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
-
-  const handleSubmit = () => {};
+    const[signup,{error,isLoading,isError}] =useSignupMutation()
+  const handleSignUp = (e) => {
+    e.preventDefault()
+    signup({name,email,password})
+  };
   return (
    <Container>
     <Row>
       <Col md={5} className="register_form--container">
-        <Form style={{ width: "100%" }} onSubmit={handleSubmit}>
+        <Form style={{ width: "100%" }} onSubmit={handleSignUp}>
           <h1>Create your Account</h1>
+          {isError&&<Alert variant="danger">{error.data}</Alert>}
           <Form.Group>
-            <Form.Control type="email" className="mb-3" placeholder="Enter email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
+            <Form.Control type="text" className="mb-3" placeholder="Enter userName" value={name} onChange={(e)=>setName(e.target.value)} required />
+          </Form.Group>
+          <Form.Group>
+            <Form.Control type="text" className="mb-3" placeholder="Enter email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
           </Form.Group>
           <Form.Group>
             <Form.Control
